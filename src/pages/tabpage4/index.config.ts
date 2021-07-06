@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '我的'
+  navigationBarTitleText: '模块4'
 }

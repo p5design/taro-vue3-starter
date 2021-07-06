@@ -8,6 +8,7 @@ let tabList = require("../custom-tab-bar/conf");
  */
 export function activeTabbarItem(callback) {
   let currPath = Taro.Current.router.path;
+  console.log("currPath: " + currPath);
   for (let i = 0; i < tabList.length; i++) {
     if (tabList[i].pagePath === currPath) {
       let currPage = Taro.getCurrentPages()[0];

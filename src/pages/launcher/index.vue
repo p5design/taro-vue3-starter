@@ -7,7 +7,6 @@
       "
     >
       <view class="launcher-info">
-        <view class="title">{{ $env.appName }}</view>
         <view class="logo">
           <image
             :src="$assetsImage.main.launcher_logo"
@@ -18,7 +17,7 @@
       </view>
       <view class="launcher-loading">
         <AtActivityIndicator
-          size="36"
+          :size="36"
           mode="center"
           content="数据加载中..."
           :color="$env.appMainColor"

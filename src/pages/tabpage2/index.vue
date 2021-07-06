@@ -5,10 +5,14 @@
 </template>
 
 <script>
+import { activeTabbarItem } from "@/biz/tabbar";
 export default {
   name: "Index",
   components: {},
   methods: {},
+  mounted() {
+    activeTabbarItem();
+  },
 };
 </script>
 

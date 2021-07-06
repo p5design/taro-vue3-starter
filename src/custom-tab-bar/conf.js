@@ -2,13 +2,16 @@ const tabRoot = "/assets/images/app";
 const tabPath = tabRoot + "/tab";
 const tabSelPath = tabRoot + "/tab_sel";
 
-// 主包
-const main_tabpage1 = "pages/tabpage1/index";
-const main_tabpage2 = "pages/tabpage2/index";
-const main_tabpage3 = "pages/tabpage3/index";
-const main_tabpage4 = "pages/tabpage4/index";
+// 重要提示
+// 页面路径 一定要在最前面加上 '/' 否者无法跳转也不提示错误
 
-const test_component = "pages/_test_component/index";
+// tabpage
+const main_tabpage1 = "/pages/tabpage1/index";
+const main_tabpage2 = "/pages/tabpage2/index";
+const main_tabpage3 = "/pages/tabpage3/index";
+const main_tabpage4 = "/pages/tabpage4/index";
+// 跳转
+const test_component = "/pages/_test_component/index";
 
 const tabList = [
   {

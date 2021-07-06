@@ -20,12 +20,12 @@ export function hideLoading() {
   Taro.hideNavigationBarLoading({});
 }
 
-// 默认前置方法
+// 前置处理方法
 export function handleOptions(options) {
   setTokenInHeader(options);
 }
 
-// 放置 queryString 中
+// token 放置 queryString 中
 export function setTokenInQueryString(options) {
   if (getToken()) {
     let _queryString = {};
@@ -34,7 +34,7 @@ export function setTokenInQueryString(options) {
   }
 }
 
-// 放置 header 中
+// token 放置 header 中
 export function setTokenInHeader(options) {
   if (getToken()) {
     let _header = {};
@@ -43,13 +43,13 @@ export function setTokenInHeader(options) {
   }
 }
 
-// 默认后置方法
+// 后置处理方法
 export function handleReturn(respData) {
   return handleAjaxReturn(respData);
 }
 
-// 处理默认错误
-export function isRespGood(respData) {
+// 判断是否返回结果正常
+export function isRespOK(respData) {
   // 非正常 http 返回, 200以上错误
   if (respData.status && respData.status > 200 && respData.msg) {
     return false;
@@ -59,7 +59,7 @@ export function isRespGood(respData) {
 
 // 处理返回结果
 export function handleAjaxReturn(respData) {
-  if (isRespGood(respData)) {
+  if (isRespOK(respData)) {
     // {
     //  "code": xxx,  #code不等于200都为失败
     //  "data": xxx , #data接口返回的数据，可能是对象也可能是列表，根据接口而定
@@ -89,6 +89,7 @@ export function handleAjaxReturn(respData) {
   }
 }
 
+// 显示错误信息
 export function showErrorMsg(title, content) {
   Taro.showModal({
     title,
