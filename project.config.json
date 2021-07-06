@@ -2,12 +2,12 @@
   "miniprogramRoot": "./dist",
   "projectname": "p5d-taro-vue3",
   "description": "基于taro3+vue3实现的代码脚手架",
-  "appid": "touristappid",
+  "appid": "wx5e11715d536f45b9",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": false,
     "postcss": false,
-    "minified": false
+    "minified": true
   },
   "compileType": "miniprogram"
 }

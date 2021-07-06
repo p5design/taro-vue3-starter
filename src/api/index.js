@@ -1,6 +1,6 @@
 // 基于 http 与 urlConf 创建的 api 接口
 import $http from "@/utils/http";
-import { getBaseUrl } from "./conf";
+import { getBaseUrl, showLoading, hideLoading } from "./conf";
 
 // 创建 urlConf
 const createUrlConf = () => {
@@ -35,8 +35,12 @@ const createAPI = (urlConf) => {
           // 匹配接口前缀 开发环境则通过proxy配置转发请求； 生产环境根据实际配置
           options.baseURL = uc.baseURL || getBaseUrl(uc.url);
           uc.baseURL = options.baseURL;
-
           uc.method = uc.method || "get";
+
+          // 显示加载提示
+          if (uc.showLoading) {
+            showLoading();
+          }
 
           // 前置处理
           if (uc.before) {
@@ -53,6 +57,11 @@ const createAPI = (urlConf) => {
           let handleFunction = $http[uc.method];
           const reqReturn = handleFunction(uc.url, params, options);
 
+          // 隐藏加载提示
+          if (uc.showLoading) {
+            hideLoading();
+          }
+
           // 后置处理
           if (uc.after) {
             let curr = this;
@@ -63,7 +72,7 @@ const createAPI = (urlConf) => {
             return reqReturn;
           }
         } catch (err) {
-          console.log("### API-Error ###\n%s", JSON.stringify(err));
+          console.log("## api-error ##\n%s", JSON.stringify(err));
         }
       };
     }

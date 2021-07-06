@@ -1,7 +1,7 @@
 // 网络请求封装
 import Taro from "@tarojs/taro";
 import qs from "qs";
-import { urlQuery } from "@/utils/common";
+import { urlQuery, stringTemplate } from "@/utils/common";
 
 // 检查响应状态
 function checkStatus(response) {
@@ -60,25 +60,40 @@ function checkStatus(response) {
 // 请求与响应
 const httpInterceptor = (chain) => {
   const config = chain.requestParams;
-  // 在发送请求之前做处理...
+
+  // 处理请求类型
   config.method = config.method.toUpperCase();
 
-  config.headers = Object.assign(
-    config.method === "GET"
-      ? {
-          Accept: "application/json",
-          "Content-Type": "application/json; charset=UTF-8",
-        }
-      : {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-    config.headers
-  );
+  // 处理 URL
+  if (config.baseURL) {
+    config.url = config.baseURL + config.url;
+  }
 
-  if (config.method === "POST") {
-    const contentType = config.headers["Content-Type"];
+  // 处理 RESTful 格式参数
+  if (config.url.includes("{") && config.url.includes("}")) {
+    let urlWithParams = stringTemplate(config.url, config.params);
+    config.url = urlWithParams;
+    delete config.params;
+  }
+
+  // GET/DELETE/HEAD 请求，参数放到 url 中
+  if (
+    config.method === "GET" ||
+    config.method === "DELETE" ||
+    config.method === "HEAD"
+  ) {
+    if (config.params) {
+      config.url = urlQuery(config.url, config.params);
+    }
+  }
+
+  // POST/PUT 请求， data参数的格式处理
+  if (config.method === "POST" || config.method === "PUT") {
+    const contentType =
+      config.header &&
+      (config.header["Content-Type"] || config.header["content-type"]);
     // 根据Content-Type转换data格式
-    if (contentType) {
+    if (contentType && typeof config.data === "object") {
       if (contentType.includes("multipart")) {
         // 类型 'multipart/form-data;'
         // config.data = data;
@@ -86,7 +101,7 @@ const httpInterceptor = (chain) => {
         // 类型 'application/json;'
         // 服务器收到的raw body(原始数据) "{name:"nowThen",age:"18"}"（普通字符串）
         config.data = JSON.stringify(config.data);
-      } else {
+      } else if (contentType.includes("application/x-www-form-urlencoded")) {
         // 类型 'application/x-www-form-urlencoded;'
         // 服务器收到的raw body(原始数据) name=nowThen&age=18
         config.data = qs.stringify(config.data);
@@ -94,36 +109,18 @@ const httpInterceptor = (chain) => {
     }
   }
 
-  // 如果是get方法，把参数加到querySting中
-  // config.url = urlQuery(config.url, config.params);
-  if (config.method === "GET") {
-    config.url = urlQuery(config.url, config.params);
-  }
-
-  let contentType = "application/json";
-  contentType = config.contentType || contentType;
-  const options = {
-    url: config.baseURL + config.url,
-    data: config.data,
-    method: config.method,
-    header: {
-      "content-type": contentType,
-    },
-  };
-
-  // console.log("### req-options ###\n%s", JSON.stringify(options, null, 2));
-
-  return chain.proceed(options).then((response) => {
-    return Promise.resolve(checkStatus(response));
+  // 继续处理
+  return chain.proceed(config).then((resp) => {
+    return Promise.resolve(checkStatus(resp));
   });
 };
 Taro.addInterceptor(httpInterceptor);
 
 // 发起请求
-const request = async function (params) {
-  const requestTask = Taro.request(params);
-  const res = await requestTask;
-  return res;
+const request = async function (options) {
+  const requestTask = Taro.request(options);
+  const resp = await requestTask;
+  return resp;
 };
 
 export default request;

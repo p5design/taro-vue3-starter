@@ -1,14 +1,19 @@
 import { createApp } from 'vue'
-import store from './store'
-import $api from "@/api"
+import $bus from 'vue3-eventbus'
+import $store from './store'
+import $api from "@/api/index"
+import { timeout } from "@/utils/common"
 import './app.scss'
 
+
 const App = createApp({
-  onShow (options) {},
+  onShow () {},
   // 入口组件不需要实现 render 方法，即使实现了也会被 taro 所覆盖
 })
 
-App.use(store)
+App.use($store)
+App.use($bus)
 App.config.globalProperties.$api = $api
+App.config.globalProperties.$timeout = timeout
 
 export default App

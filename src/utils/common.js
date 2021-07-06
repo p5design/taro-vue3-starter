@@ -11,10 +11,14 @@ export function urlQuery(url, params) {
     return url;
   }
   let qstr = params2Query(params);
-  if (url.indexOf("?") !== -1) {
-    return url + "&" + qstr;
+  if (qstr) {
+    if (url.indexOf("?") !== -1) {
+      return url + "&" + qstr;
+    } else {
+      return url + "?" + qstr;
+    }
   } else {
-    return url + "?" + qstr;
+    return url;
   }
 }
 
@@ -25,11 +29,24 @@ export function urlQuery(url, params) {
  */
 export function params2Query(params = {}) {
   var qstr = Object.keys(params)
-    .map(function (key) {
+    .map((key) => {
       return encodeURIComponent(key) + "=" + encodeURIComponent(params[key]);
     })
     .join("&");
   return qstr;
+}
+
+/**
+ * 填充默认内容
+ *
+ * stringTemplate("hello ${name}", {name: "pw"}) // "hello pw"
+ *
+ * @param {*} tmpl
+ * @param {*} context
+ * @returns
+ */
+export function stringTemplate(tmpl, context) {
+  return tmpl.replace(/\${(.*?)}/g, (match, key) => context[key.trim()]);
 }
 
 /**
@@ -89,4 +106,15 @@ export function browserEnv() {
     Symbian: u.indexOf("Symbian") > -1,
     ucSB: u.indexOf("Firofox/1.") > -1,
   };
+}
+
+/**
+ * timeout的promise版本
+ * @param {*} t
+ * @returns
+ */
+export function timeout(t) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(), t);
+  });
 }

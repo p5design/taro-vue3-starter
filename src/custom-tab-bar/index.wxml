@@ -1,0 +1,17 @@
+<view class="tabbar_box" style="background-color: {{backgroundColor}}">
+  <block wx:for="{{list}}" wx:for-item="item" wx:key="index">
+    <navigator wx:if="{{item.isJump}}" class="tabbar_nav" hover-class="none" url="{{item.pagePath}}"
+      style="color: {{selectedColor}}" open-type="navigate">
+      <view class='special-wrapper'>
+        <image class="tabbar_icon" src="{{item.iconPath}}"></image>
+      </view>
+      <image class='special-text-wrapper'></image>
+      <text class="tabbar_text">{{item.text}}</text>
+    </navigator>
+    <navigator wx:else class="tabbar_nav" hover-class="none" url="{{item.pagePath}}"
+      style="color: {{selected === index ? selectedColor : color}}" open-type="switchTab">
+      <image class="tabbar_icon" src="{{selected === index ? item.selectedIconPath : item.iconPath}}"></image>
+      <text class="tabbar_text">{{item.text}}</text>
+    </navigator>
+  </block>
+</view>
