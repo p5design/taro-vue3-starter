@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import { activeTabbarItem } from "@/biz/tabbar";
+import { activeTabbarItem } from "@/biz/tarox";
+
 export default {
   name: "Index",
   components: {},

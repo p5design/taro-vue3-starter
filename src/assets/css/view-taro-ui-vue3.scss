@@ -1,0 +1,170 @@
+.vm-form {
+  .at-list__item {
+    .item-extra__info {
+      color: #cccccc;
+      padding-right: 36px;
+    }
+    &.selected {
+      .item-extra__info {
+        color: #333;
+      }
+    }
+
+    &.extra-btn {
+      .item-extra__info {
+        background: #333;
+        color: #fff;
+        border-radius: 10px;
+        text-align: center;
+        padding: 10px 20px;
+      }
+    }
+  }
+}
+
+// card嵌套 form
+.vm-card {
+  position: relative;
+  margin-bottom: 20px;
+
+  .at-list::after {
+    display: none;
+  }
+
+  .at-list__item-extra {
+    max-width: 335px;
+  }
+
+  .at-form::after {
+    display: none;
+  }
+  .at-input {
+    margin-left: 22rpx;
+  }
+
+  input {
+    text-align: right;
+    padding-right: 58px;
+  }
+
+  ::-webkit-input-placeholder {
+    /* WebKit browsers */
+    direction: rtl;
+  }
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    direction: rtl;
+  }
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ but I'm not sure about working */
+    direction: rtl;
+  }
+  :-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    direction: rtl;
+  }
+}
+
+.vm-input {
+  &.text-right {
+    input {
+      text-align: right;
+      padding-right: 58px;
+    }
+
+    ::-webkit-input-placeholder {
+      /* WebKit browsers */
+      direction: rtl;
+    }
+    :-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      direction: rtl;
+    }
+    ::-moz-placeholder {
+      /* Mozilla Firefox 19+ but I'm not sure about working */
+      direction: rtl;
+    }
+    :-ms-input-placeholder {
+      /* Internet Explorer 10+ */
+      direction: rtl;
+    }
+  }
+
+  &.text-center {
+    input {
+      text-align: center;
+    }
+
+    ::-webkit-input-placeholder {
+      text-align: center;
+    }
+    :-moz-placeholder {
+      text-align: center;
+    }
+    ::-moz-placeholder {
+      text-align: center;
+    }
+    :-ms-input-placeholder {
+      text-align: center;
+    }
+  }
+}
+
+//
+.btn-share-regiment {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+
+  .at-icon {
+    text-align: center;
+    font-size: 44px;
+    color: #999;
+  }
+
+  .at-button {
+    border: none;
+  }
+}
+
+//
+.btn-choose-role {
+  margin: 10px auto;
+  color: #999;
+  font-size: 22px;
+  text-align: center;
+  position: relative;
+  width: 160px;
+  padding: 20px 10px;
+  // background: #080;
+
+  &.inline-block {
+    margin: 5px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .at-icon {
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 90px;
+    height: 90px;
+    font-size: 44px;
+    padding-top: 20px;
+  }
+
+  .btn-text {
+    padding: 10px 0;
+  }
+}
+
+.vm-list-item-icon {
+  width: 90px;
+  height: 90px;
+}
+
+.at-modal__footer .at-modal__action {
+  padding: 20px 0;
+}

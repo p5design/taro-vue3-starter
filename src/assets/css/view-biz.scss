@@ -264,55 +264,36 @@
   width: 100%;
   height: calc(100vh - 100px);
   overflow: auto;
+
+  &.with-header {
+    height: calc(100vh - 200px);
+  }
+
+  &.no-btns {
+    height: 100%;
+  }
 }
 
 .vm-form-body {
   padding: 20px;
 }
 
+.vm-form-header {
+  background-color: #fff;
+  height: 100px;
+  padding: 20px 20px;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 10px #ccc;
+}
+
 .vm-form-btns {
   background-color: #fff;
   height: 100px;
   padding: 20px 20px;
+  border-top: 1px solid #ddd;
+  box-shadow: 0 -2px 10px #ccc;
 }
 
-// card嵌套
-.vm-card {
-  margin-bottom: 20px;
-
-  .at-list::after {
-    display: none;
-  }
-
-  .at-list__item-extra {
-    max-width: 335px;
-  }
-
-  .at-form::after {
-    display: none;
-  }
-  .at-input {
-    margin-left: 22rpx;
-  }
-
-  input {
-    text-align: right;
-  }
-
-  ::-webkit-input-placeholder {
-    /* WebKit browsers */
-    direction: rtl;
-  }
-  :-moz-placeholder {
-    /* Mozilla Firefox 4 to 18 */
-    direction: rtl;
-  }
-  ::-moz-placeholder {
-    /* Mozilla Firefox 19+ but I'm not sure about working */
-    direction: rtl;
-  }
-  :-ms-input-placeholder {
-    /* Internet Explorer 10+ */
-    direction: rtl;
-  }
+.tabbar-placeholder {
+  height: 200px;
 }

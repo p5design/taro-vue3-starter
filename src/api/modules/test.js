@@ -1,4 +1,6 @@
-import { handleOptions, handleReturn } from "../conf";
+import BaseConf from "../conf";
+
+let { handleOptions, handleReturn } = BaseConf;
 // URL配置
 const urlConf = {
   sayHi: {

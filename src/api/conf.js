@@ -1,65 +1,24 @@
+import { createBaseConf } from "taro-api";
 import Taro from "@tarojs/taro";
 import $env from "@/biz/env";
 import { getToken } from "@/biz/auth";
-import { urlQuery } from "@/utils/common";
-import { loginAuto } from "@/biz/wxuser";
 
-// 基本url
-export function getBaseUrl(url) {
-  let BASE_URL = $env.apiBaseUrl;
-  return BASE_URL;
+function showErrorMsg(title, content, callback) {
+  Taro.showModal({
+    title,
+    content,
+    showCancel: false,
+    success: function (res) {
+      callback && callback();
+    },
+  });
 }
 
-// 显示加载提示
-export function showLoading() {
-  Taro.showNavigationBarLoading({});
-}
+// 1. 创建基本配置
+let baseConf = createBaseConf($env.apiBaseUrl, $env.apiTokenName, getToken);
 
-// 关闭加载提示
-export function hideLoading() {
-  Taro.hideNavigationBarLoading({});
-}
-
-// 前置处理方法
-export function handleOptions(options) {
-  setTokenInHeader(options);
-}
-
-// token 放置 queryString 中
-export function setTokenInQueryString(options) {
-  if (getToken()) {
-    let _queryString = {};
-    _queryString[$env.apiTokenName] = getToken();
-    options.url = urlQuery(options.url, _queryString);
-  }
-}
-
-// token 放置 header 中
-export function setTokenInHeader(options) {
-  if (getToken()) {
-    let _header = {};
-    _header[$env.apiTokenName] = getToken();
-    options.header = Object.assign(options.header || {}, _header);
-  }
-}
-
-// 后置处理方法
-export function handleReturn(respData) {
-  return handleAjaxReturn(respData);
-}
-
-// 判断是否返回结果正常
-export function isRespOK(respData) {
-  // 非正常 http 返回, 200以上错误
-  if (respData.status && respData.status > 200 && respData.msg) {
-    return false;
-  }
-  return true;
-}
-
-// 处理返回结果
-export function handleAjaxReturn(respData) {
-  if (isRespOK(respData)) {
+baseConf.handleReturn = (respData) => {
+  if (!(respData.status && respData.status > 200 && respData.msg)) {
     // {
     //  "code": xxx,  #code不等于200都为失败
     //  "data": xxx , #data接口返回的数据，可能是对象也可能是列表，根据接口而定
@@ -69,32 +28,27 @@ export function handleAjaxReturn(respData) {
       return Promise.resolve(respData.data);
     } else {
       // 非200 给完整的返回结果
-      // showErrorMsg("业务错误:" + respData.code, respData.msg);
-      return Promise.resolve(respData);
+      showErrorMsg("业务错误:" + respData.code, respData.msg);
+      return Promise.reject(respData);
     }
   }
   // 错误返回如何处理
   else {
     // 如果是token过期，则需要再次登录刷新token
     if (respData.status == 401) {
-      loginAuto().then(() => {
-        showErrorMsg("用户状态过期", "已刷新用户状态，请再次点击按钮发起请求");
+      showErrorMsg("用户状态过期", "请点击确认重新登录", function () {
+        Taro.reLaunch({
+          url: "/pages/launcher/index",
+        });
       });
     }
     // 其他的则直接弹出提示框
     else {
-      showErrorMsg(respData.msg, JSON.stringify(respData.data, null, 2));
+      // showErrorMsg(respData.msg, JSON.stringify(respData.data, null, 2));
+      showErrorMsg(respData.msg, "内部错误，请稍后再尝试");
     }
     Promise.resolve(null);
   }
-}
+};
 
-// 显示错误信息
-export function showErrorMsg(title, content) {
-  Taro.showModal({
-    title,
-    content,
-    showCancel: false,
-    success: function (res) {},
-  });
-}
+export default baseConf;
